@@ -1,0 +1,20 @@
+﻿@model List<List<List<string>>>
+
+@foreach (var card in Model)
+{
+    <div class="card">
+        <table>
+            @for (int r = 0; r < card.Count; r++)
+            {
+                <tr>
+                    @for (int c = 0; c < card[r].Count; c++)
+                    {
+                        var cellText = card[r][c];
+                        var cellClass = (Model.Count % 2 == 1 && r == c && (r * Model.Count + c) == (Model.Count * Model.Count - 1) / 2) ? "free-space" : "";
+                        <td class="@cellClass">@cellText</td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+}

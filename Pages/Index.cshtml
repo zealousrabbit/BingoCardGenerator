@@ -1,0 +1,177 @@
+﻿@page
+@model BingoCardGenerator.Pages.IndexModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bingo Card Generator 2000!</title>
+    <style>
+        body { <!-- general body styling -->
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header-title {
+            font-size: 1.5em;
+            margin: 0;
+        }
+
+        .subheading {
+            font-size: 1em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+            .form-column label {
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+
+            .form-column input, .form-column textarea {
+                padding: 10px;
+                box-sizing: border-box;
+                width: 100%;
+            }
+
+                .form-column input[type="number"] {
+                    width: 100%;
+                    text-align: center;
+                }
+
+            .form-column textarea {
+                resize: vertical;
+            }
+
+            .form-column button {
+                align-self: center;
+                padding: 10px 20px;
+            }
+
+        .nav-buttons {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+            .nav-buttons a {
+                padding: 5px;
+                font-size: 0.8em;
+                background-color: #ddd;
+                border: 1px solid #ccc;
+                border-radius: 3px;
+                text-decoration: none;
+                color: #333;
+            }
+
+                .nav-buttons a:hover {
+                    background-color: #ccc;
+                }
+    </style>
+</head>
+<body> <!-- text formatting -->
+    <div class="nav-buttons">
+        <a href="/">Home</a>
+        <a href="#">Privacy</a>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="header-title">Bingo Card Generator 2000!</h1>
+            <p class="subheading">
+                Looking for a way to spice up movie night? Wanna add a little pizazz to your next party? 
+                Need a drinking game or friendly fun activity to keep things fresh at family reunions? 
+                Introducing: Bingo Card Generator 2000! 
+                Use this page to choose the size, number, and contents of your very own custom bingo cards to print and share with friends! Happy- uh, bingo-ing!
+            </p>
+        </div>
+        <form id="bingoForm" method="post">
+            <div class="form-container">
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="numCards">Number of Cards:</label>
+                        <input type="number" id="numCards" name="numCards" min="1" max="999" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="size">Size (NxN):</label>
+                        <input type="number" id="size" name="size" min="1" max="999" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="freeSpace">Free Space Phrase:</label>
+                        <input type="text" id="freeSpace" name="freeSpace" />
+                    </div>
+                </div>
+
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="phrases">Phrases (comma-separated):</label>
+                        <textarea id="phrases" name="phrases" rows="4" required></textarea>
+                    </div>
+                </div>
+
+                <div class="form-column">
+                    <button type="button" id="generateButton">Generate Your Cards!</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#generateButton').click(function (event) {
+                event.preventDefault();
+                var formData = $('#bingoForm').serialize();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Page("Index")',
+                    data: formData,
+                    success: function (response) {
+                        var newWindow = window.open('', '', 'width=800,height=600');
+                        newWindow.document.write('<html><head><title>Bingo Cards</title><style>.card {border: 1px solid #ddd; margin: 10px; box-sizing: border-box; width: 400px; height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: center;} .card-title {width: 100%; text-align: center; padding: 10px; background-color: #f1f1f1; border-bottom: 1px solid #ddd; font-weight: bold; font-size: 1.2em; box-sizing: border-box;} .card table {border-collapse: collapse; width: 100%; height: 100%;} .card td {border: 1px solid #ddd; padding: 10px; text-align: center; vertical-align: middle; font-size: 0.8em; box-sizing: border-box; width: 20%; height: 20%;} .card td.free-space {background-color: #f0f0f0; font-weight: bold;}</style></head><body>' + response + '</body></html>');
+                        newWindow.document.close();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                        alert('An error occurred while generating the cards.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
