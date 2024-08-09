@@ -8,5 +8,5 @@ I'm going to continue to work on it this weekend after I get some rest, but I'm 
 By next Tuesday, during the job fair, it should be looking good.
 Thank you for your patience.
 
-Card = Entire Bingo Card
+Card = Entire Bingo Card -
 Cells, Phrases, Grid = The individual phrases and their iteration on the board
